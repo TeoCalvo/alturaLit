@@ -1,6 +1,7 @@
 # %%
 import pandas as pd
 from sklearn import tree
+from sklearn import ensemble
 from sklearn import pipeline
 from sklearn import metrics
 
@@ -10,7 +11,7 @@ from feature_engine.imputation import CategoricalImputer
 
 # %%
 
-df = pd.read_excel("../data/data.xlsx")
+df = pd.read_excel("data/data.xlsx")
 df.head()
 
 # %%
@@ -41,7 +42,9 @@ def fix_altura(c):
 # Tirando valores que não conhecemos a target
 df_train = df.dropna( subset=[target], how="all" )
 df_train[target] = df_train[target].apply(fix_altura)
- 
+
+df_train[target].describe()
+
 # %%
 
 # Definição do pipeline de Machine Learning
@@ -53,7 +56,13 @@ num_imput = ArbitraryNumberImputer( variables=num_features,
 
 onehot_task = OneHotEncoder(variables=cat_features)
 
-rg_task = tree.DecisionTreeRegressor(max_depth=10)
+rg_task = ensemble.GradientBoostingRegressor(random_state=42,
+                                            n_estimators=300,
+                                            learning_rate=0.85,
+                                            subsample=0.7,
+                                            max_depth=2,
+                                            criterion='mae',
+                                        )
 
 model_pipeline = pipeline.Pipeline(steps=[ ("cat_imputer", cat_imput),
                                            ("num_imputer", num_imput),
@@ -82,4 +91,4 @@ df_model = pd.Series(
     "mean_abs_err": avg_abs_erro}
 )
 
-df_model.to_pickle("../models/model_tree.pkl")
+df_model.to_pickle("models/model_tree.pkl")
