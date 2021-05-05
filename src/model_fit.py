@@ -5,9 +5,12 @@ from sklearn import ensemble
 from sklearn import pipeline
 from sklearn import metrics
 
+import matplotlib.pyplot as plt
+
 from feature_engine.encoding import OneHotEncoder
 from feature_engine.imputation import ArbitraryNumberImputer
 from feature_engine.imputation import CategoricalImputer
+
 
 # %%
 
@@ -43,7 +46,9 @@ def fix_altura(c):
 df_train = df.dropna( subset=[target], how="all" )
 df_train[target] = df_train[target].apply(fix_altura)
 
-df_train[target].describe()
+print(df_train[target].describe())
+
+df_train[target].hist(bins=25)
 
 # %%
 
@@ -61,7 +66,7 @@ rg_task = ensemble.GradientBoostingRegressor(random_state=42,
                                             learning_rate=0.85,
                                             subsample=0.7,
                                             max_depth=2,
-                                            criterion='mae',
+                                            
                                         )
 
 model_pipeline = pipeline.Pipeline(steps=[ ("cat_imputer", cat_imput),
@@ -72,7 +77,7 @@ model_pipeline = pipeline.Pipeline(steps=[ ("cat_imputer", cat_imput),
 
 model_pipeline.fit(df_train[features], df_train[target])
 
-# %%
+
 
 pred = model_pipeline.predict(df_train[features])
 avg_abs_erro = metrics.mean_absolute_error(df_train[target], pred)
