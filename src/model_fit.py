@@ -77,8 +77,6 @@ model_pipeline = pipeline.Pipeline(steps=[ ("cat_imputer", cat_imput),
 
 model_pipeline.fit(df_train[features], df_train[target])
 
-
-
 pred = model_pipeline.predict(df_train[features])
 avg_abs_erro = metrics.mean_absolute_error(df_train[target], pred)
 r2 = metrics.r2_score( df_train[target], pred )
@@ -97,3 +95,5 @@ df_model = pd.Series(
 )
 
 df_model.to_pickle("models/model_tree.pkl")
+
+# %%

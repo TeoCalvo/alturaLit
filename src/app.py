@@ -28,6 +28,3 @@ st.text(f"Estimamos que a sua altura é: {altura:.2f}")
 
 st.write("""## Quer contribuir?\n
 Fique a vontade para contribuir adicionando seus dados neste [formulário](https://forms.gle/eoszvqSKWUGerHTu8).""")
-
-
-
